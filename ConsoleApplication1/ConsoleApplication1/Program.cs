@@ -13,6 +13,7 @@ namespace ConsoleApplication1
     class Program
     {
         private static int _a = 0;
+       
         static void Main(string[] args)
         {
             #region
@@ -45,17 +46,20 @@ namespace ConsoleApplication1
             #endregion
 
             int a = 1000;
-            int[] generatedArray = BigArray(количествоЦиферок: 35, limit: a);
+            int[] generatedArray = BigArray(количествоЦиферок: 10, limit: a);
             
             
-            //SortArr(generatedArray);
-            DrawRand(generatedArray,10,5);
+            
+            SortArr(generatedArray);
+            //DrawRand(generatedArray,10,5);
 
             //DrawArr(20, 5);
-            string s = Console.ReadLine();
-            int i = Int32.Parse(s);
-            int found = FindSimple(generatedArray, i);
+//            string s = Console.ReadLine();
+//            int i = Int32.Parse(s);
+//            int found = FindSimple(generatedArray, i);
+            int found = FindBinary(generatedArray, x:int.Parse(Console.ReadLine()), first:0, last:generatedArray.Length-1);
             Console.WriteLine(found);
+            DrawRand(generatedArray,found,found);
 
             Console.ReadLine();
         }
@@ -109,6 +113,29 @@ namespace ConsoleApplication1
             return sa;
         }
 
+        public static int FindBinary(int[] array, int x, int first, int last)
+        {
+//            int left = array[0];
+//            first = left;
+//            int right = array.Length - 1;
+//            last = right;
+            int m = first + (last - first)/2;
+//            x = int.Parse(Console.ReadLine());
+            if (array[m] == x)
+            {
+                return m;
+            }
+            else if (array[m] > x)
+            {
+                return FindBinary(array, x, first, m);
+            }
+            else
+            {
+                return FindBinary(array, x, m + 1, last);
+            }
+
+        }
+
         public static void DrawLine(int[] arr, char left, char centr, char right)
         {
             Console.Write(left);//"┌");
@@ -126,11 +153,6 @@ namespace ConsoleApplication1
 
         public static void DrawRand(int[] arr, int idx, int point)
         {
-            //            string vertLine = new string('─', arr.Length * 6 - 1);
-            //            string drawLine = new string('┬', (arr.Length *  6 - 1)% 6 );
-
-            //            Console.Write("┌" + vertLine + drawLine + "┐");
-
             Console.SetCursorPosition(0, 0);
             DrawLine(arr, '┌', '┬', '┐');
             Console.WriteLine();
@@ -153,7 +175,7 @@ namespace ConsoleApplication1
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
             DrawLine(arr, '└', '┴', '┘');
-            //Console.Write("└" + vertLine + "┘");
+          
 
         }
 
@@ -174,40 +196,10 @@ namespace ConsoleApplication1
             return qw;
         }
 
-        public static Поднос<Рататуй> СделатьРататуй(Баклажан вася, Помидор петя, Цукини абрам)
-        {
-            //....
-            Поднос<Рататуй> подносец = new Поднос<Рататуй>();
-            Рататуй рататуец = new Рататуй();
-            подносец.Содержимое = рататуец;
-            return подносец;
-        }
+      
 
     }
 
-    class Рататуй
-    {
-
-    }
-
-    class Поднос<TВсеЧтоУгодно>
-    {
-        public TВсеЧтоУгодно Содержимое;
-    }
-
-    class Баклажан
-    {
-
-    }
-
-    class Цукини
-    {
-
-    }
-
-    class Помидор
-    {
-
-    }
+   
 
 }
