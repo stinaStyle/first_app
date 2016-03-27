@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -10,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
-    class Program
+    static class Program
     {
         private static int _a = 0;
-       
+
         static void Main(string[] args)
         {
             #region
@@ -46,22 +48,29 @@ namespace ConsoleApplication1
             #endregion
 
             int a = 1000;
-            int[] generatedArray = BigArray(количествоЦиферок: 10, limit: a);
-            
-            
-            
+
+            int[] generatedArray = BigArray(количествоЦиферок: 10000, limit: a);
+            Stopwatch sw = new Stopwatch();
+            Console.WriteLine("Started");
+            sw.Start();
+
+            //QuickSort_Recursive(generatedArray, 0, generatedArray.Length - 1);
             SortArr(generatedArray);
-            //DrawRand(generatedArray,10,5);
+            //Array.Sort(generatedArray);
+            sw.Stop();
 
-            //DrawArr(20, 5);
-//            string s = Console.ReadLine();
-//            int i = Int32.Parse(s);
-//            int found = FindSimple(generatedArray, i);
-            int found = FindBinary(generatedArray, x:int.Parse(Console.ReadLine()), first:0, last:generatedArray.Length-1);
-            Console.WriteLine(found);
-            DrawRand(generatedArray,found,found);
 
+            // DrawArr(20, 5);
+            //                        string s = Console.ReadLine();
+            //                        int i = Int32.Parse(s);
+            //                        int found = FindSimple(generatedArray, i);
+            //                        int found = FindBinary(generatedArray, x:int.Parse(Console.ReadLine()), left:0, right:generatedArray.Length-1);
+            //                        Console.WriteLine(found);
+            //                        DrawArray(generatedArray,found,found);
+
+            Console.WriteLine("Done. Time elapsed: {0} ms", sw.ElapsedMilliseconds);
             Console.ReadLine();
+            //Console.ReadLine();
         }
 
         public static void SortArr(int[] SomeArr)
@@ -73,22 +82,64 @@ namespace ConsoleApplication1
 
                 for (int i = 0; i <= SomeArr.Length - j - 2; i++)
                 {
-                    DrawRand(SomeArr, i + 1, i);
+                    //DrawArray(SomeArr, i + 1, i);
                     if (SomeArr[i] > SomeArr[i + 1])
                     {
 
                         c = SomeArr[i];
                         SomeArr[i] = SomeArr[i + 1];
                         SomeArr[i + 1] = c;
-                        DrawRand(SomeArr, i, i + 1);
-                        Thread.Sleep(2 * timingMult);
+                        //DrawArray(SomeArr, i, i + 1);
+                        //Thread.Sleep(2 * timingMult);
                     }
 
-                    Thread.Sleep(1 * timingMult);
+                    //Thread.Sleep(1 * timingMult);
                     //Thread.Sleep(300);
                 }
             }
             Console.WriteLine();
+        }
+
+        
+        static public int Partition(int[] a, int left, int right)
+        {
+            int x = a[right];
+            int i = left - 1;
+            int j;
+            
+            for (j = left; j < right; j++)
+            {
+                if (a[j] <= x)
+                {
+                    i++;
+                    a.Swap(i,j);
+                }
+            }
+            a.Swap(right,i+1);
+            
+            return i + 1;
+        }
+
+        static public void QuickSort_Recursive(int[] a, int left, int right)
+        {
+            int q;
+            if (left < right)
+            {
+                q = Partition(a, left, right);
+                QuickSort_Recursive(a, left, q - 1);
+                QuickSort_Recursive(a, q + 1, right);
+            }
+        }
+
+        private static void Swap(this int[] arr, int left, int right)
+        {
+            //DrawArray(arr, left, right);
+            //Thread.Sleep(100);
+            var t = arr[left];
+            arr[left] = arr[right];
+            arr[right] = t;
+            //DrawArray(arr, right, left);
+            //Thread.Sleep(300);
         }
 
         public static int FindSimple(int[] array, int h)
@@ -115,12 +166,12 @@ namespace ConsoleApplication1
 
         public static int FindBinary(int[] array, int x, int first, int last)
         {
-//            int left = array[0];
-//            first = left;
-//            int right = array.Length - 1;
-//            last = right;
-            int m = first + (last - first)/2;
-//            x = int.Parse(Console.ReadLine());
+            //            int left = array[0];
+            //            left = left;
+            //            int right = array.Length - 1;
+            //            right = right;
+            int m = first + (last - first) / 2;
+            //            x = int.Parse(Console.ReadLine());
             if (array[m] == x)
             {
                 return m;
@@ -151,7 +202,7 @@ namespace ConsoleApplication1
             Console.Write(right); //"┐");
         }
 
-        public static void DrawRand(int[] arr, int idx, int point)
+        public static void DrawArray(int[] arr, int idx, int point)
         {
             Console.SetCursorPosition(0, 0);
             DrawLine(arr, '┌', '┬', '┐');
@@ -175,7 +226,7 @@ namespace ConsoleApplication1
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
             DrawLine(arr, '└', '┴', '┘');
-          
+
 
         }
 
@@ -196,10 +247,10 @@ namespace ConsoleApplication1
             return qw;
         }
 
-      
+
 
     }
 
-   
+
 
 }
